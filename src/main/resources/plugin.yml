@@ -1,0 +1,26 @@
+name: ${project.name}
+version: ${project.version}
+main: com.i0dev.kitgui.KitGUIPlugin
+website: ${project.url}
+authors: [ i01 ]
+depend: [ MassiveCore ]
+description: ${project.description}
+api-version: 1.20
+permissions:
+  kitgui.basecommand: { description: kitgui basecommand, default: false }
+  kitgui.version: { description: check version, default: false }
+  kitgui.*:
+    kitgui.basecommand: true
+    kitgui.version: true
+  kitgui.kit.op:
+    default: op
+    children:
+      kitgui.*: true
+  kitgui.kit.rank0:
+    default: false
+    children:
+      kitgui.basecommand: true
+  kitgui.kit.default:
+    default: true
+    children:
+      kitgui.kit.rank0: true
