@@ -28,6 +28,31 @@ public class MConf extends Entity<MConf> {
 
     public String kitCommand = "kit %name%";
 
+    public ConfigItem borderItem = new ConfigItem(
+            "&7",
+            Material.BLACK_STAINED_GLASS_PANE,
+            MUtil.list("&7"),
+            1,
+            true
+    );
+
+    public ConfigItem previewBackButton = new ConfigItem(
+            "&c&lBACK",
+            Material.BARRIER,
+            MUtil.list("&7Click to go back to the category."),
+            1,
+            false
+    );
+
+    public ConfigItem categoryBackButton = new ConfigItem(
+            "&c&lBACK",
+            Material.BARRIER,
+            MUtil.list("&7Click to go back to the main menu."),
+            1,
+            false
+    );
+
+
     public boolean enabled = true;
     public int mainMenuSize = 9;
     public String mainMenuTitle = "&aKitGUI &7- &aMain Menu";

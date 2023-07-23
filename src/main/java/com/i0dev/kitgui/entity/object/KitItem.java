@@ -31,6 +31,9 @@ public class KitItem {
 
     List<ConfigItem> items;
 
+    int previewGuiSize;
+    int previewBackButtonItemSlot;
+
     Material trimMaterial = null;
     String trimPattern = null;
 
@@ -78,7 +81,7 @@ public class KitItem {
         return stack;
     }
 
-    public KitItem(int slot, String kitName, String displayName, Material material, List<String> lore, boolean glow, List<ConfigItem> items) {
+    public KitItem(int slot, String kitName, String displayName, Material material, List<String> lore, boolean glow, List<ConfigItem> items, int previewGuiSize, int previewBackButtonItemSlot) {
         this.slot = slot;
         this.kitName = kitName;
         this.displayName = displayName;
@@ -86,5 +89,7 @@ public class KitItem {
         this.lore = lore;
         this.glow = glow;
         this.items = items;
+        this.previewGuiSize = previewGuiSize;
+        this.previewBackButtonItemSlot = previewBackButtonItemSlot;
     }
 }

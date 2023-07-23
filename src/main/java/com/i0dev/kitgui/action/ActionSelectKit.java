@@ -1,5 +1,7 @@
 package com.i0dev.kitgui.action;
 
+import com.i0dev.kitgui.engine.EngineKit;
+import com.i0dev.kitgui.entity.Category;
 import com.i0dev.kitgui.entity.MConf;
 import com.i0dev.kitgui.entity.MLang;
 import com.i0dev.kitgui.entity.object.ConfigItem;
@@ -24,6 +26,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ActionSelectKit implements ChestAction {
 
+    Category backCategory;
     KitItem kitItem;
 
 
@@ -38,7 +41,6 @@ public class ActionSelectKit implements ChestAction {
         // preview kit
         if (e.getClick().isRightClick()) {
             e.getWhoClicked().openInventory(getPreviewInventory(kitItem, (Player) e.getWhoClicked()));
-            e.getWhoClicked().sendMessage(Utils.prefixAndColor(MLang.get().previewingKit, new Pair<>("%kit%", kitItem.getKitName())));
         }
 
 
@@ -48,7 +50,7 @@ public class ActionSelectKit implements ChestAction {
     @SneakyThrows
     public Inventory getPreviewInventory(KitItem kitI, Player player) {
         List<ItemStack> items = getItemsInKit(player);
-        Inventory inventory = Bukkit.createInventory(null, 54, Utils.color(MConf.get().getPreviewTitle().replace("%kit%", kitI.getKitName()))); // TODO make size based off of items size
+        Inventory inventory = Bukkit.createInventory(null, kitI.getPreviewGuiSize(), Utils.color(MConf.get().getPreviewTitle().replace("%kit%", kitI.getKitName())));
         ChestGui menu = ChestGui.getCreative(inventory);
         menu.setAutoclosing(true);
         menu.setAutoremoving(true);
@@ -58,6 +60,13 @@ public class ActionSelectKit implements ChestAction {
         for (int i = 0; i < items.size(); i++) {
             menu.getInventory().setItem(i, items.get(i));
         }
+
+
+        menu.getInventory().setItem(kitItem.getPreviewBackButtonItemSlot(), MConf.get().previewBackButton.getItemStack());
+        menu.setAction(kitItem.getPreviewBackButtonItemSlot(), e -> {
+            e.getWhoClicked().openInventory(EngineKit.get().getCategoryInventory(backCategory.getId(), (Player) e.getWhoClicked()));
+            return true;
+        });
 
         return menu.getInventory();
     }

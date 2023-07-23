@@ -24,6 +24,7 @@ public class Category extends Entity<Category> {
     int slot;
     String guiTitle;
     int guiSize;
+    int backButtonItemSlot;
     String displayName;
     Material material;
     List<String> lore;
@@ -58,6 +59,7 @@ public class Category extends Entity<Category> {
         category.setSlot(0);
         category.setGuiTitle("&aExample Category");
         category.setGuiSize(9);
+        category.setBackButtonItemSlot(8);
         category.setDisplayName("&aExample Category");
         category.setMaterial(Material.PAPER);
         category.setLore(MUtil.list("&7This is an example category", "&7You can use it to get a reward"));
@@ -85,7 +87,9 @@ public class Category extends Entity<Category> {
                                         1,
                                         true
                                 )
-                        )
+                        ),
+                        27,
+                        8
                 )
         ));
     }

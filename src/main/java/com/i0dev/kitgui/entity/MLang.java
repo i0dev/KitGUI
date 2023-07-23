@@ -14,8 +14,6 @@ public class MLang extends Entity<MLang> {
 
     public String prefix = "&8[&aKitGUI&8]&7";
 
-    public String previewingKit = "%prefix% &aPreviewing kit &7%kit%";
-
     @Override
     public MLang load(MLang that) {
         super.load(that);

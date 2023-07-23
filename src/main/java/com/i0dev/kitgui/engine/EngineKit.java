@@ -53,6 +53,10 @@ public class EngineKit extends Engine {
         menu.setSoundOpen(null);
         menu.setSoundClose(null);
 
+        for (int i = 0; i < MConf.get().getMainMenuSize(); i++) {
+            menu.getInventory().setItem(i, MConf.get().borderItem.getItemStack());
+        }
+
         for (Category category : CategoryColl.get().getAll()) {
             menu.getInventory().setItem(category.getSlot(), category.getItemStack(1));
 
@@ -76,6 +80,10 @@ public class EngineKit extends Engine {
         menu.setSoundOpen(null);
         menu.setSoundClose(null);
 
+        for (int i = 0; i < category.getGuiSize(); i++) {
+            menu.getInventory().setItem(i, MConf.get().borderItem.getItemStack());
+        }
+
         User user = KitGUIPlugin.get().getEssentials().getUser(observer);
         for (KitItem kitItem : category.getKits()) {
             Kit kit = new Kit(kitItem.getKitName().toLowerCase(), KitGUIPlugin.get().getEssentials());
@@ -92,9 +100,16 @@ public class EngineKit extends Engine {
             }
 
             menu.getInventory().setItem(kitItem.getSlot(), kitItem.getItemStack());
-            menu.setAction(kitItem.getSlot(), new ActionSelectKit(kitItem));
+            menu.setAction(kitItem.getSlot(), new ActionSelectKit(category, kitItem));
         }
 
+        if (category.getBackButtonItemSlot() != -1) {
+            menu.getInventory().setItem(category.getBackButtonItemSlot(), MConf.get().categoryBackButton.getItemStack());
+            menu.setAction(category.getBackButtonItemSlot(), e -> {
+                e.getWhoClicked().openInventory(getMainInventory());
+                return true;
+            });
+        }
         return menu.getInventory();
     }
 
