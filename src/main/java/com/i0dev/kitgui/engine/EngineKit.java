@@ -3,6 +3,7 @@ package com.i0dev.kitgui.engine;
 import com.earth2me.essentials.Kit;
 import com.earth2me.essentials.User;
 import com.i0dev.kitgui.KitGUIPlugin;
+import com.i0dev.kitgui.action.ActionPreviewKit;
 import com.i0dev.kitgui.action.ActionSelectKit;
 import com.i0dev.kitgui.entity.Category;
 import com.i0dev.kitgui.entity.CategoryColl;
@@ -87,9 +88,10 @@ public class EngineKit extends Engine {
         User user = KitGUIPlugin.get().getEssentials().getUser(observer);
         for (KitItem kitItem : category.getKits()) {
             Kit kit = new Kit(kitItem.getKitName().toLowerCase(), KitGUIPlugin.get().getEssentials());
-
+            menu.setAction(kitItem.getSlot(), new ActionPreviewKit(category, kitItem));
             if (!observer.hasPermission("essentials.kits." + kitItem.getKitName())) {
                 menu.getInventory().setItem(kitItem.getSlot(), MConf.get().getNoAccessKitItem().getItemStack());
+                menu.setAction(kitItem.getSlot(), new ActionSelectKit(category, kitItem));
                 continue;
             }
 

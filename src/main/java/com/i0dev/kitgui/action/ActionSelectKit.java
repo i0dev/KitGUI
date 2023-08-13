@@ -38,58 +38,10 @@ public class ActionSelectKit implements ChestAction {
             return MixinCommand.get().dispatchCommand(e.getWhoClicked(), MConf.get().getKitCommand().replace("%name%", kitItem.getKitName()));
         }
 
-        // preview kit
-        if (e.getClick().isRightClick()) {
-            e.getWhoClicked().openInventory(getPreviewInventory(kitItem, (Player) e.getWhoClicked()));
-        }
-
+        if (e.getClick().isRightClick())
+            new ActionPreviewKit(backCategory, kitItem).onClick(e);
 
         return true;
-    }
-
-    @SneakyThrows
-    public Inventory getPreviewInventory(KitItem kitI, Player player) {
-        List<ItemStack> items = getItemsInKit(player);
-        Inventory inventory = Bukkit.createInventory(null, kitI.getPreviewGuiSize(), Utils.color(MConf.get().getPreviewTitle().replace("%kit%", kitI.getKitName())));
-        ChestGui menu = ChestGui.getCreative(inventory);
-        menu.setAutoclosing(true);
-        menu.setAutoremoving(true);
-        menu.setSoundOpen(null);
-        menu.setSoundClose(null);
-
-        for (int i = 0; i < items.size(); i++) {
-            menu.getInventory().setItem(i, items.get(i));
-        }
-
-
-        menu.getInventory().setItem(kitItem.getPreviewBackButtonItemSlot(), MConf.get().previewBackButton.getItemStack());
-        menu.setAction(kitItem.getPreviewBackButtonItemSlot(), e -> {
-            e.getWhoClicked().openInventory(EngineKit.get().getCategoryInventory(backCategory.getId(), (Player) e.getWhoClicked()));
-            return true;
-        });
-
-        return menu.getInventory();
-    }
-
-    @SneakyThrows
-    public List<ItemStack> getItemsInKit(Player observer) {
-        List<ItemStack> items = new ArrayList<>();
-
-        for (ConfigItem item : kitItem.getItems()) {
-            ItemStack itemStack = item.getItemStack();
-            ItemMeta itemMeta = itemStack.getItemMeta();
-            if (itemMeta == null) continue;
-            List<String> newLore = new ArrayList<>();
-            for (String s : itemMeta.getLore()) {
-                newLore.add(s.replace("%player%", observer.getName()));
-            }
-            itemMeta.setLore(newLore);
-            itemStack.setItemMeta(itemMeta);
-
-            items.add(itemStack);
-        }
-
-        return items;
     }
 
 }
