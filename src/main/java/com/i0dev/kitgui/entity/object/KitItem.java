@@ -57,17 +57,18 @@ public class KitItem {
     public ItemStack getItemStack() {
         ItemStack stack = new ItemBuilder(material)
                 .name(displayName)
-                .lore(lore)
+                .setNewLore(lore)
                 .amount(1)
                 .addGlow(glow);
 
         ItemMeta meta = stack.getItemMeta();
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
         meta.addItemFlags(ItemFlag.HIDE_DESTROYS);
         meta.addItemFlags(ItemFlag.HIDE_PLACED_ON);
-        meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
-        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
+        meta.addItemFlags(ItemFlag.HIDE_DYE);
         meta.addItemFlags(ItemFlag.HIDE_ARMOR_TRIM);
-        meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
         stack.setItemMeta(meta);
         meta = stack.getItemMeta();
         if (meta instanceof ArmorMeta armorMeta && trimMaterial != null && trimPattern != null) {

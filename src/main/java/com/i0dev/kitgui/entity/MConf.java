@@ -26,6 +26,9 @@ public class MConf extends Entity<MConf> {
 
     public List<String> openGuiTrigger = MUtil.list("/kit", "/kitgui", "kits", "ekits", "ekit");
 
+    public boolean startWithCategoryInsteadOfMainMenu = false;
+    public String startWithCategoryName = "example";
+
     public String kitCommand = "kit %name%";
 
     public ConfigItem borderItem = new ConfigItem(

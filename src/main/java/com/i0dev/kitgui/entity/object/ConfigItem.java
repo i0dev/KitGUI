@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ArmorMeta;
@@ -50,14 +51,14 @@ public class ConfigItem {
     public ItemStack getItemStack() {
         ItemStack stack = new ItemBuilder(material)
                 .name(name)
-                .lore(lore)
+                .setNewLore(lore)
                 .amount(amount)
                 .addGlow(glow);
 
         ItemMeta meta = stack.getItemMeta();
         meta.addItemFlags(ItemFlag.HIDE_DESTROYS);
         meta.addItemFlags(ItemFlag.HIDE_PLACED_ON);
-        meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+        meta.addItemFlags(ItemFlag.HIDE_DESTROYS);
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         meta.addItemFlags(ItemFlag.HIDE_ARMOR_TRIM);
         meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
@@ -70,7 +71,6 @@ public class ConfigItem {
                     )));
             stack.setItemMeta(armorMeta);
         }
-
         return stack;
     }
 

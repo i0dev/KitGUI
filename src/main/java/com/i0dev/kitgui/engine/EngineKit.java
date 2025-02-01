@@ -13,13 +13,14 @@ import com.i0dev.kitgui.util.Pair;
 import com.i0dev.kitgui.util.Utils;
 import com.massivecraft.massivecore.Engine;
 import com.massivecraft.massivecore.chestgui.ChestGui;
-import com.massivecraft.massivecore.util.TimeZoneUtil;
 import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.inventory.Inventory;
+
+import java.util.concurrent.TimeUnit;
 
 public class EngineKit extends Engine {
 
@@ -28,7 +29,6 @@ public class EngineKit extends Engine {
     public static EngineKit get() {
         return i;
     }
-
 
     /**
      * This event is used to open the main menu when the player types the command.
@@ -40,6 +40,12 @@ public class EngineKit extends Engine {
         for (String s : MConf.get().getOpenGuiTrigger()) {
             if (!e.getMessage().equalsIgnoreCase(s)) continue;
             e.setCancelled(true);
+
+            if (MConf.get().startWithCategoryInsteadOfMainMenu) {
+                e.getPlayer().openInventory(getCategoryInventory(MConf.get().startWithCategoryName, e.getPlayer()));
+                return;
+            }
+
             e.getPlayer().openInventory(getMainInventory());
             return;
         }
@@ -97,7 +103,7 @@ public class EngineKit extends Engine {
 
             long nextUse = kit.getNextUse(user);
             if (nextUse > 0 && nextUse > System.currentTimeMillis()) {
-                menu.getInventory().setItem(kitItem.getSlot(), MConf.get().getKitOnCoolDownItem().getItemStack(new Pair<>("%cooldown%", TimeZoneUtil.getAdjustedTime(nextUse, "EST"))));
+                menu.getInventory().setItem(kitItem.getSlot(), MConf.get().getKitOnCoolDownItem().getItemStack(new Pair<>("%cooldown%", timeUntil(nextUse))));
                 continue;
             }
 
@@ -115,5 +121,27 @@ public class EngineKit extends Engine {
         return menu.getInventory();
     }
 
+    public static String timeUntil(long futureTimestamp) {
+        long millisUntilFuture = futureTimestamp - System.currentTimeMillis();
+
+        if (millisUntilFuture < 0) {
+            return "now";
+        }
+
+        long days = TimeUnit.MILLISECONDS.toDays(millisUntilFuture);
+        long hours = TimeUnit.MILLISECONDS.toHours(millisUntilFuture) % 24;
+        long minutes = TimeUnit.MILLISECONDS.toMinutes(millisUntilFuture) % 60;
+        long seconds = TimeUnit.MILLISECONDS.toSeconds(millisUntilFuture) % 60;
+
+        if (days > 0) {
+            return String.format("%d days, %d hours, %d minutes, and %d seconds", days, hours, minutes, seconds);
+        } else if (hours > 0) {
+            return String.format("%d hours, %d minutes, and %d seconds", hours, minutes, seconds);
+        } else if (minutes > 0) {
+            return String.format("%d minutes and %d seconds", minutes, seconds);
+        } else {
+            return String.format("%d seconds", seconds);
+        }
+    }
 
 }

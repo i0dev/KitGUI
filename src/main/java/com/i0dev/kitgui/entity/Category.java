@@ -34,8 +34,9 @@ public class Category extends Entity<Category> {
     public ItemStack getItemStack(int amount) {
         return new ItemBuilder(material)
                 .name(displayName)
-                .lore(lore)
+                .setNewLore(lore)
                 .amount(amount)
+                .hideAllAttributes()
                 .addGlow(glow);
     }
 
